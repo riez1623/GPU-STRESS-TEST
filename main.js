@@ -1,4 +1,3 @@
-// main.js
 const canvas = document.getElementById('gl-canvas');
 const gl = canvas.getContext('webgl');
 const startScreen = document.getElementById('start-screen');
@@ -15,7 +14,6 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
   gl.viewport(0, 0, canvas.width, canvas.height);
 }
-
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
@@ -23,15 +21,10 @@ const fragShaderSrc = `
   precision highp float;
   uniform float time;
   uniform vec2 resolution;
-
-  float noise(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-  }
-
   void main() {
     vec2 uv = gl_FragCoord.xy / resolution;
-    float n = noise(uv * 80.0 + time);
-    gl_FragColor = vec4(vec3(n), 1.0);
+    float val = sin(dot(uv * 40.0, vec2(time))) * 0.5 + 0.5;
+    gl_FragColor = vec4(vec3(val), 1.0);
   }
 `;
 
@@ -46,9 +39,6 @@ function compileShader(src, type) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, src);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error('Shader compile failed:', gl.getShaderInfoLog(shader));
-  }
   return shader;
 }
 
@@ -78,6 +68,7 @@ let startTime = performance.now();
 function render() {
   const currentTime = performance.now();
   const time = (currentTime - startTime) * 0.001;
+
   gl.uniform1f(timeLoc, time);
   gl.uniform2f(resLoc, canvas.width, canvas.height);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -95,17 +86,17 @@ function render() {
 }
 
 function flashEffect(callback) {
-  let flashes = 0;
-  const maxFlashes = 20;
+  let count = 0;
+  const flashes = 30;
   const interval = setInterval(() => {
-    document.body.style.backgroundColor = flashes % 2 === 0 ? 'white' : 'black';
-    flashes++;
-    if (flashes >= maxFlashes) {
+    document.body.style.backgroundColor = count % 2 === 0 ? 'white' : 'black';
+    count++;
+    if (count >= flashes) {
       clearInterval(interval);
       document.body.style.backgroundColor = 'black';
       callback();
     }
-  }, 50);
+  }, 60);
 }
 
 function startCountdown() {
@@ -113,17 +104,17 @@ function startCountdown() {
   countdownScreen.style.display = 'flex';
   countdownText.textContent = count;
 
-  const interval = setInterval(() => {
+  const timer = setInterval(() => {
     count--;
     if (count > 0) {
       countdownText.textContent = count;
     } else {
-      clearInterval(interval);
+      clearInterval(timer);
       countdownScreen.style.display = 'none';
       flashEffect(() => {
+        document.body.requestFullscreen().catch(() => {});
         canvas.style.display = 'block';
         fpsCounter.style.display = 'block';
-        document.body.requestFullscreen();
         render();
       });
     }
