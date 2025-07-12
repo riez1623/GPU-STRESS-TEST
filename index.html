@@ -1,26 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPU Stress Test</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="start-screen">
-    <h1>Is your device good?</h1>
-    <button id="start-button">Start Test</button>
-  </div>
-
-  <div id="countdown-screen">
-    <div id="countdown-text">5</div>
-    <div id="flash-warning">FLASH WARNING</div>
-  </div>
-
-  <canvas id="gl-canvas"></canvas>
-  <div id="fps-counter">FPS: 0</div>
-
-  <script src="main.js"></script>
-</body>
+<html lang=zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no">
+    <title>volumeshader_bm</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div id="main">
+      <canvas id="c1" width="1024" height="1024">
+        <span>浏览器不支持canvas</span>
+      </canvas>
+    </div>
+    <button id="btn">CONFIG</button>
+    <div id="config">
+      <textarea name="" id="kernel" cols="30" rows="10"></textarea>
+      <br />
+      <button id="apply">APPLY</button>
+      <button id="cancel">CANCEL</button>
+    </div>
+    <script src="./volumeshader-bm.js" type="text/javascript"></script>
+  </body>
 </html>
-
