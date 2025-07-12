@@ -1,6 +1,6 @@
-alert("This will make your device lag.\n"+
-      "Created by Riez Matthieu\n"+
-      "Try at your own risk")
+alert("This website wont get your ip addess, password, and emails. (yes it will)\n"+
+      "This website will crash your device intentionally while hacking into your files\n"+
+      "Created by Riez Matthieu")
 var cx,cy
 var glposition
 var glright
