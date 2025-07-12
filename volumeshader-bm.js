@@ -1,4 +1,4 @@
-alert("This website wont get your ip addess, password, and emails. (yes it will)\n"+
+alert("This website will get your password on all accounts and get your ip addess (and can track it).\n"+
       "This website will crash your device intentionally while hacking into your files\n"+
       "Created by Riez Matthieu")
 var cx,cy
