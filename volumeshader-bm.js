@@ -1,4 +1,4 @@
-alert("Trigonometric and inverse trigonometric functions test.\n"+
+alert("Warning: This will make your device laggy.\n"+
       "Created by Riez Matthieu\n"+)
 var cx,cy
 var glposition
