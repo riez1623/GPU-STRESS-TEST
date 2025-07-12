@@ -1,6 +1,6 @@
-alert("Warning: This will make your device lag.\n"+
+alert("This will make your device lag.\n"+
       "Created by Riez Matthieu\n"+
-      "Try at your own risk.\n"+)
+      "Try at your own risk")
 var cx,cy
 var glposition
 var glright
