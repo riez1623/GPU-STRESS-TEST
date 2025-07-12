@@ -1,6 +1,5 @@
 alert("Trigonometric and inverse trigonometric functions test.\n"+
-      "Created by cznull\n"+
-      "Modified by livcm")
+      "Created by Riez Matthieu\n"+)
 var cx,cy
 var glposition
 var glright
