@@ -1,8 +1,11 @@
+// main.js
 const canvas = document.getElementById('gl-canvas');
 const gl = canvas.getContext('webgl');
 const startScreen = document.getElementById('start-screen');
 const startButton = document.getElementById('start-button');
 const fpsCounter = document.getElementById('fps-counter');
+const countdownScreen = document.getElementById('countdown-screen');
+const countdownText = document.getElementById('countdown-text');
 
 let frameCount = 0;
 let lastTime = performance.now();
@@ -16,7 +19,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Shader source
 const fragShaderSrc = `
   precision highp float;
   uniform float time;
@@ -62,12 +64,8 @@ const positionAttrib = gl.getAttribLocation(program, 'position');
 const buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-  -1, -1,
-   1, -1,
-  -1,  1,
-  -1,  1,
-   1, -1,
-   1,  1,
+  -1, -1,  1, -1,  -1, 1,
+  -1, 1,   1, -1,   1, 1,
 ]), gl.STATIC_DRAW);
 gl.enableVertexAttribArray(positionAttrib);
 gl.vertexAttribPointer(positionAttrib, 2, gl.FLOAT, false, 0, 0);
@@ -80,7 +78,6 @@ let startTime = performance.now();
 function render() {
   const currentTime = performance.now();
   const time = (currentTime - startTime) * 0.001;
-
   gl.uniform1f(timeLoc, time);
   gl.uniform2f(resLoc, canvas.width, canvas.height);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -97,10 +94,43 @@ function render() {
   requestAnimationFrame(render);
 }
 
+function flashEffect(callback) {
+  let flashes = 0;
+  const maxFlashes = 20;
+  const interval = setInterval(() => {
+    document.body.style.backgroundColor = flashes % 2 === 0 ? 'white' : 'black';
+    flashes++;
+    if (flashes >= maxFlashes) {
+      clearInterval(interval);
+      document.body.style.backgroundColor = 'black';
+      callback();
+    }
+  }, 50);
+}
+
+function startCountdown() {
+  let count = 5;
+  countdownScreen.style.display = 'flex';
+  countdownText.textContent = count;
+
+  const interval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      countdownText.textContent = count;
+    } else {
+      clearInterval(interval);
+      countdownScreen.style.display = 'none';
+      flashEffect(() => {
+        canvas.style.display = 'block';
+        fpsCounter.style.display = 'block';
+        document.body.requestFullscreen();
+        render();
+      });
+    }
+  }, 1000);
+}
+
 startButton.onclick = () => {
   startScreen.style.display = 'none';
-  canvas.style.display = 'block';
-  fpsCounter.style.display = 'block';
-  document.body.requestFullscreen();
-  render();
+  startCountdown();
 };
